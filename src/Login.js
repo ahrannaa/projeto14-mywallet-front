@@ -5,30 +5,32 @@ import styled from "styled-components";
 import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function Login() {
-  const { setToken } = useContext(UsuarioContext);
+  const { setUser } = useContext(UsuarioContext);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   let navigate = useNavigate()
 
-  const userLogin = async (e) =>{
-   e.preventDefault()
-   const URL = "http://localhost:5000/login"
+  const userLogin = async (e) => {
+    e.preventDefault()
+    const URL = "http://localhost:5000/login"
 
-   const body = {
-        email: email,
-        password: password,
-     }
-  
-      try {
-        const response = await axios.post(URL, body)
-        setToken(response.data.token)
-        navigate("../extrato", { replace: true })
-      } catch (err) {
-        alert(`error: ${err.response?.data}`)
-      }
+    const body = {
+      email: email,
+      password: password,
     }
-  
+
+    try {
+      const response = await axios.post(URL, body)
+      console.log(response)
+      setUser(response.data)
+      navigate("../extrato", { replace: true })
+    } catch (err) {
+      console.log(err)
+      alert(`error: ${err.response?.data}`)
+    }
+  }
+
 
   return (
     <Container>

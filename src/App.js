@@ -10,13 +10,12 @@ import { useState } from "react";
 
 export default function App() {
     document.body.style.backgroundColor = "#8C11BE";
-    const [token, setToken] = useState("")
-    const [user, setUser] = useState("")
+    const [user, setUser] = useState({})
 
     return (
 
         <BrowserRouter>
-            <UsuarioContext.Provider value={{ token, setToken, user, setUser}}>
+            <UsuarioContext.Provider value={{ user, setUser}}>
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/cadastro" element={<Cadastro />} />

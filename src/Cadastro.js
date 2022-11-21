@@ -1,11 +1,9 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function Cadastro() {
-  const {setUser} = useContext(UsuarioContext);
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -26,7 +24,6 @@ export default function Cadastro() {
     
      try {
       const response = await axios.post(URL, body)
-      setUser(body.name)
       alert(`Cadastrado com sucesso. ${response.data}`)
       navigate("../", { replace: true });
 

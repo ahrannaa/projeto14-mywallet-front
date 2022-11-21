@@ -7,7 +7,7 @@ import { UsuarioContext } from "./contexts/UsuarioContext";
 
 
 export default function CadastrarSaida() {
-  const { token } = useContext(UsuarioContext);
+  const { user } = useContext(UsuarioContext);
   const [value, setValue] = useState()
   const [description, setDescription] = useState("")
 
@@ -19,14 +19,14 @@ export default function CadastrarSaida() {
     const URL = "http://localhost:5000/transaction"
 
     const body = {
-      value: value,
+      value: Number(value),
       description: description,
-
+      type: "saida"
     }
 
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
@@ -37,7 +37,7 @@ export default function CadastrarSaida() {
     } catch (err) {
       alert(`error: ${err.response?.data}`)
     }
-}
+  }
 
   return (
     <Container>

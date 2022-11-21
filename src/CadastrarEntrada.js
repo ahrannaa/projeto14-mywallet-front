@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function CadastrarEntrada() {
-  const { token } = useContext(UsuarioContext);
+  const { user } = useContext(UsuarioContext);
   const [value, setValue] = useState()
   const [description, setDescription] = useState("")
 
@@ -17,14 +17,15 @@ export default function CadastrarEntrada() {
     const URL = "http://localhost:5000/transaction"
 
     const body = {
-      value: value,
+      value: Number(value),
       description: description,
-      
-    }
+      type:"entrada"
+
+  }
 
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
