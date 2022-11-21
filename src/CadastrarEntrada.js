@@ -1,28 +1,69 @@
+import axios from "axios";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function CadastrarEntrada() {
-    return (
-        <Container>
-            <Logo>Nova Entrada</Logo>
-            <form>
-                <Box>
-                    <Valor
-                        type="text"
-                        name="valorEntrada"
-                        id="valor"
-                        placeholder="Valor"
-                    ></Valor>
-                    <Descrição
-                        type="text"
-                        name="descricao"
-                        id="descricao"
-                        placeholder="Descrição"
-                    ></Descrição>
-                    <Botao>Salvar entrada</Botao>
-                </Box>
-            </form>
-        </Container>
-    )
+  const { token } = useContext(UsuarioContext);
+  const [value, setValue] = useState()
+  const [description, setDescription] = useState("")
+
+  let navigate = useNavigate()
+
+  const cashEntry = async (e) => {
+    e.preventDefault()
+
+    const URL = "http://localhost:5000/transaction"
+
+    const body = {
+      value: value,
+      description: description,
+      
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+
+    try {
+      await axios.post(URL, body, config)
+      navigate("../extrato", { replace: true })
+    } catch (err) {
+      alert(`error: ${err.response?.data}`)
+    }
+  }
+
+
+  return (
+    <Container>
+      <Logo>Nova Entrada</Logo>
+      <form onSubmit={cashEntry}>
+        <Box>
+          <Valor
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            type="text"
+            name="valor"
+            placeholder="Valor"
+            required
+          ></Valor>
+          <Descrição
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            type="text"
+            name="descricao"
+            placeholder="Descrição"
+            required
+          ></Descrição>
+          <Botao type="submit">Salvar entrada</Botao>
+        </Box>
+      </form>
+    </Container>
+  )
 }
 
 const Container = styled.div`

@@ -1,44 +1,86 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function Cadastro() {
-    return (
-        <>
-            <Logo>MyWallet</Logo>
-            <form>
-                <Box>
-                    <Input
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Nome"
-                    ></Input>
-                    <Input
-                        type="text"
-                        name="email"
-                        id="email"
-                        placeholder="E-mail"
-                    ></Input>
-                    <Input
-                        type="text"
-                        name="password"
-                        id="password"
-                        placeholder="Senha"
-                    ></Input>
-                    <Input
-                        type="text"
-                        name="password"
-                        id="password"
-                        placeholder="Confirme a senha"
-                    ></Input>
-                    <Botao>Cadastrar</Botao>
-                    <StyleLink>
-                        <Link to="/">Já tem uma conta? Entre agora!</Link>
-                    </StyleLink>
-                </Box>
-            </form>
-        </>
-    )
+  const {setUser} = useContext(UsuarioContext);
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmedPassword, setConfirmedPassword] = useState("")
+
+  let navigate = useNavigate();
+
+ const registerUser = async (e) => {
+    e.preventDefault()
+    const URL = "http://localhost:5000/usuarios"
+
+    const body = {
+      name: name,
+      email: email,
+      password: password,
+      confirmedPassword: confirmedPassword
+    }
+    
+     try {
+      const response = await axios.post(URL, body)
+      setUser(body.name)
+      alert(`Cadastrado com sucesso. ${response.data}`)
+      navigate("../", { replace: true });
+
+
+    } catch (err) {
+      alert(`error: ${err.response?.data}`)
+    }
+  }
+  
+  return (
+    <>
+      <Logo>MyWallet</Logo>
+      <form onSubmit={registerUser}>
+        <Box>
+          <Input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            type="text"
+            required
+            name="name"
+            placeholder="Nome"
+          ></Input>
+          <Input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+            required
+            name="email"
+            placeholder="E-mail"
+          ></Input>
+          <Input
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            required
+            name="password"
+            placeholder="Senha"
+          ></Input>
+          <Input
+            value={confirmedPassword}
+            onChange={e => setConfirmedPassword(e.target.value)}
+            type="password"
+            required
+            name="password"
+            placeholder="Confirme a senha"
+          ></Input>
+          <Botao type="submit">Cadastrar</Botao>
+          <StyleLink>
+            <Link to="/">Já tem uma conta? Entre agora!</Link>
+          </StyleLink>
+        </Box>
+      </form>
+    </>
+  )
 }
 
 const Logo = styled.div`
@@ -59,23 +101,6 @@ const Input = styled.input`
   width: 303px;
   height: 45px;
   margin-bottom: 10px;
-  background: #ffffff;
-  border: 1px solid #d5d5d5;
-  border-radius: 5px;
-
-  ::placeholder {
-    font-size: 20px;
-    font-family: "Lexend Deca";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 19.976px;
-    line-height: 25px;
-    padding: 10px;
-  }
-`
-const Senha = styled.input`
-  width: 303px;
-  height: 45px;
   background: #ffffff;
   border: 1px solid #d5d5d5;
   border-radius: 5px;

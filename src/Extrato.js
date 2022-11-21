@@ -1,35 +1,62 @@
+import axios from "axios";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { UsuarioContext } from "./contexts/UsuarioContext";
 
 
 export default function Extrato() {
-    return (
-        <>
-            <Container>
-                <Logo>Olá, Fulano</Logo>
-                <Icon>
-                    <ion-icon name="exit-outline"></ion-icon>
-                </Icon>
-            </Container>
-            <Box><p>Não há registros de entrada ou saída</p></Box>
-            <Boxsizing>
-                <Botao>
-                    <Icons>
-                        <ion-icon name="add-circle-outline"></ion-icon>
-                    </Icons>
-                    <p> Nova entrada</p>
-                </Botao>
-                <Botao>
-                    <Icons>
-                     <ion-icon name="remove-circle-outline"></ion-icon>
-                    </Icons>
-                    <p>Nova saída</p>
-                </Botao>
-            </Boxsizing>
+  const { token } = useContext(UsuarioContext);
+  const {user} = useContext(UsuarioContext);
+  console.log(user)
 
-        </>
 
-    )
+  const URL = "http://localhost:5000/transaction"
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const promise = axios.get(URL, config)
+  console.log(promise)
+
+  promise.then((resposta) => {
+    console.log("funcionou");
+  });
+  promise.catch((error) => {
+    console.log(error.response.data.message)
+  });
+;
+
+return (
+  <>
+    <Container>
+      <Logo> Olá, {user}</Logo>
+      <Icon>
+       <Link to="/"><ion-icon name="exit-outline"></ion-icon></Link>
+      </Icon>
+    </Container>
+    <Box><p>Não há registros de entrada ou saída</p></Box>
+    <Boxsizing>
+      <Botao>
+        <Icons>
+       <Link to="/entrada"><ion-icon name="add-circle-outline"></ion-icon></Link> 
+        </Icons>
+        <p> Nova entrada</p>
+      </Botao>
+      <Botao>
+        <Icons>
+        <Link to="/saida"><ion-icon name="remove-circle-outline"></ion-icon></Link>
+        </Icons>
+        <p>Nova saída</p>
+      </Botao>
+    </Boxsizing>
+
+  </>
+
+)
 }
 
 const Container = styled.div`

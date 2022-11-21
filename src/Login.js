@@ -1,29 +1,59 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import { UsuarioContext } from "./contexts/UsuarioContext";
 
 export default function Login() {
+  const { setToken } = useContext(UsuarioContext);
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  let navigate = useNavigate()
+
+  const userLogin = async (e) =>{
+   e.preventDefault()
+   const URL = "http://localhost:5000/login"
+
+   const body = {
+        email: email,
+        password: password,
+     }
+  
+      try {
+        const response = await axios.post(URL, body)
+        setToken(response.data.token)
+        navigate("../extrato", { replace: true })
+      } catch (err) {
+        alert(`error: ${err.response?.data}`)
+      }
+    }
+  
 
   return (
     <Container>
       <Logo>MyWallet</Logo>
-      <form>
+      <form onSubmit={userLogin}>
         <Box>
           <Email
-            type="text"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+            required
             name="email"
-            id="email"
             placeholder="email"
           ></Email>
           <Senha
-            type="text"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            required
             name="password"
-            id="password"
             placeholder="senha"
           ></Senha>
-          <Botao>Entrar</Botao>
+          <Botao type="submit">Entrar</Botao>
           <StyleLink>
-          <Link to= "/cadastro">Primeira vez? Cadastre-se</Link>
+            <Link to="/cadastro">Primeira vez? Cadastre-se</Link>
           </StyleLink>
         </Box>
       </form>
